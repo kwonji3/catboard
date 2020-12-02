@@ -1,0 +1,171 @@
+body {
+	font-family: "Nanum Gothic", sans-serif;
+}
+
+h4 {
+	text-decoration: none;
+}
+
+a {
+	color: black;
+	text-decoration: none;
+}
+
+.grid1 {
+	display: grid;
+	grid-template-columns: 150px 1fr;
+	grid-gap: 50px;
+	justify-items: center;
+}
+
+.login {
+	border: 1px dotted rgb(100, 93, 93);
+	border-radius: 10px;
+	padding-left: 25px;
+	padding-right: 25px;
+	box-shadow: 3px 3px 7px gray;
+}
+
+.grid2 {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	justify-items: center;
+	margin-top: 100px;
+	margin-bottom: 25px;
+	margin-left: 50px;
+	margin-right: 50px;
+}
+
+.cat_info, .cat_adopt, .cat_qa {
+	border: 1px dotted gray;
+	border-radius: 10px;
+	padding: 15px;
+	font-size: 15px;
+	width: 150px;
+	height: 100px;
+	background: rgb(221, 217, 217);
+}
+
+.grid3 {
+	display: grid;
+	grid-template-columns: 150px 450px;
+	gap: 150px;
+	margin-left: 100px;
+	justify-items: center;
+	text-align: center;
+	border-bottom: 1px dotted gray;
+	width: 800px;
+}
+
+.navi {
+	display: grid;
+	grid-template-columns: 150px 150px 150px;
+	border: 1px solid gray;
+	border-radius: 10px;
+	height: 50px;
+	margin-top: 28px;
+	box-shadow: 1px 1px 5px gray;
+}
+
+.navi a {
+	color: black;
+}
+
+.navi a:hover, .on {
+	color: red;
+}
+
+#article_1 {
+	width: 800px;
+	margin-left: 200px;
+	border-bottom: 1px solid gray;
+	background: rgb(212, 207, 207);
+	border-radius: 10px;
+}
+
+table.article {
+	border-collapse: collapse;
+	border-bottom: 3px solid rgba(109, 109, 109, 0.562);
+	text-align: left;
+	line-height: 2;
+	width: 800px;
+	text-align: center;
+}
+
+table.article td {
+	padding: 10px;
+	vertical-align: top;
+	border-bottom: 1px solid #ccc;
+}
+
+#content {
+	padding: 20px;
+	padding-left: 100px;
+	padding-right: 100px;
+	text-align: center;
+	line-height: 1.5;
+}
+
+.arti {
+	border: 1px dotted gray;
+	border-radius: 10px;
+	margin-right: 100px;
+	margin-left: 90px;
+	width: 800px;
+	padding: 10px;
+}
+
+.cmmt {
+	border: 1px dotted gray;
+	border-radius: 10px;
+	margin-right: 100px;
+	margin-left: 90px;
+	width: 770px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 50px;
+	margin-top: 25px;
+}
+
+.board-container {
+	width: 700px;
+}
+
+.board {
+	width: 800px;
+	text-align: center;
+	margin-bottom: 15px;
+}
+
+table.board {
+	text-align: left;
+}
+
+table.board td.board__content-column {
+	padding: 10px;
+	font-size: 15px;
+}
+
+table.board td.board__content-author {
+	width: 100px;
+	padding: 10px;
+}
+
+.bard__index-containeor {
+	text-align: center;
+}
+
+.arti.board__container #index-container.bard__index-containeor.board__index-link.board__index
+	{
+	padding-right: 20px;
+}
+
+.container {
+	magin-left: 25px;
+	magin-right: 25px;
+}
+
+.blog-header-logo, .navbar-brand {
+	font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+	font-size: 2.25rem;
+}
