@@ -4,12 +4,14 @@
 <%@page import="com.CatBoard.vo.CommentVO"%>
 <%@page import="java.util.ArrayList"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cat Board</title>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
 	integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
@@ -30,14 +32,41 @@
 					<!-- 글 제목  -->
 					<tr style="border-bottom: 1px solid #e7e7e7; padding: 10px">
 
-						<td id="title" scope="row" style="padding-left: 25px;"><h3>${board.title }</h3></td>
-						<td id="name">${board.id }</td>
-						<td id="date">${board.CREATE_TIME }</td>
+						<td id="title" scope="row" style="padding-left: 25px;"><h3
+								style="margin: 0;">${board.title }</h3></td>
+						<td id="name"><p style="margin: 0;">${board.id }</p></td>
+						<td id="date"><p style="margin: 0;">${board.CREATE_TIME }</p></td>
 
 					</tr>
 				</thead>
 			</table>
-			<p class="bg-white text-dark" id="content">${board.content }</p>
+			<!-- textarea 본문 글 길이에 따른 높이 자동 조절 -->
+			<style>
+				.wrap textarea {
+					width: 100%;
+					resize: none;
+					overflow-y: hidden; /* prevents scroll bar flash */
+					padding: 1.1em; /* prevents text jump on Enter keypress */
+					padding-bottom: 0.2em;
+					line-height: 1.6;
+				}
+				</style>
+			<script>
+				$(document).ready(function() {
+					$('.wrap').on('keyup', 'textarea', function(e) {
+						$(this).css('height', 'auto');
+						$(this).height(this.scrollHeight);
+					});
+					$('.wrap').find('textarea').keyup();
+				});
+			</script>
+			<div class="wrap">
+			<textarea class="bg-white text-dark" id="content"
+				style="text-align: left; padding-left: 25px; padding-right: 25px; border: none; box-sizing: border-box;"
+				
+				readonly="readonly" disabled>${board.content }</textarea>
+			</div>
+			
 		</div>
 		<!--  작성자만 수정. 삭제 가능 -->
 		<c:set var="id" value='<%=session.getAttribute("id")%>' />
@@ -48,8 +77,8 @@
 			<form action="BoardDelete.do" method="post">
 				<input type="hidden" name="board_num" value="${board.board_num }" />
 				<input type="hidden" name="board_id" value="${board.board_id }" />
-				<input type="submit" class="btn btn-outline-dark   float-right"
-					value="삭제" />
+				<input type="submit" class="btn btn-outline-dark  float-right"
+					style="margin-bottom: 20px;" value="삭제" />
 			</form>
 			<!-- 수정 버튼 -->
 			<input type="button" class="btn btn-outline-dark   float-right"
@@ -82,11 +111,11 @@
 													<!--  콤보상자 -->
 													<!--  유효성 검사 -->
 													<select class="custom-select" id="inputGroupSelect02"
-														name="board_id" required>
+														name="board_id" disabled>
 														<option selected>${board.board_id }</option>
-														<option value="고양이지식">고양이 지식</option>
-														<option value="고양이입양">고양이 입양</option>
-														<option value="고양이질문">고양이 질문</option>
+														<option value="catinfo">고양이 지식</option>
+														<option value="catadopt">고양이 입양</option>
+														<option value="catqa">고양이 질문</option>
 													</select>
 													<input type="hidden" name="id"
 														value="<%=session.getAttribute("id")%>">
@@ -109,7 +138,9 @@
 												</tr>
 											</tbody>
 										</table>
-										<button type="submit" class="btn btn-outline-dark float-right">수정하기</button>
+										<button type="submit"
+											class="btn btn-outline-dark  float-right"
+											style="margin-left: 300px;">수정하기</button>
 										<button type="button" class="btn btn-secondary float-right"
 											style="margin-right: 10px;" data-dismiss="modal">닫기</button>
 									</div>
@@ -119,31 +150,58 @@
 					</div>
 				</div>
 			</div>
-
 		</c:if>
-		<!-- id 와 board.id가 같지 않으면 버튼 비활성화 -->
-		<c:if test="${id ne board.id }">
-			<input type="button" class="btn btn-outline-dark float-right"
-				disabled="disabled" value="삭제" />
-			<input type="button" class="btn btn-outline-dark float-right"
-				disabled="disabled" value="수정" />
-
-		</c:if>
-
+		<!-- id 와 board.id가 같지 않으면 버튼 없음 -->
+		<c:if test="${id ne board.id }"></c:if>
 		<!-- 댓글 -->
 		<div class="group" style="margin-bottom: 25px;">
+			<%
+				if (session.isNew() || session.getAttribute("id") == null) {
+			%>
 			<table class="table">
-				<c:forEach var="com" items="${comment }">
-					<tbody id="listBody">
-						<tr style="border: 1px solid #e7e7e7; padding: 10px">
-							<td id="cmt" scope="row" style="padding-left: 25px;">
-								${com.cmt }</td>
-							<td id="id">${com.id }</td>
-							<td id="date">${com.CREATE_TIME}</td>
-						</tr>
-					</tbody>
-				</c:forEach>
+				<tbody id="listBody">
+					<tr style="border: 1px solid #e7e7e7; padding: 10px">
+						<td id="cmt" scope="row" style="padding-left: 25px; color: red;">
+							댓글 읽기 및 작성은 로그인을 해야 합니다!</td>
+					</tr>
+				</tbody>
 			</table>
+			<%
+				} else {
+			%>
+			<%
+				ArrayList<CommentVO> list = (ArrayList<CommentVO>) request.getAttribute("list");
+			%>
+			<%
+				if (!list.isEmpty()) {
+				for (int i = 0; i < list.size(); i++) {
+					CommentVO comment = list.get(i);
+			%>
+			<table class="table">
+				<tbody id="listBody">
+					<tr style="border: 1px solid #e7e7e7; padding: 10px">
+						<td id="cmt" scope="row" style="width: 750px; padding-left: 25px;">
+							<%=comment.getCmt()%></td>
+						<td id="id"><%=comment.getId()%></td>
+						<td id="date"><%=comment.getCREATE_TIME()%></td>
+					</tr>
+				</tbody>
+			</table>
+			<%
+				}
+			} else {
+			%>
+			<table class="table">
+				<tbody id="listBody">
+					<tr style="border: 1px solid #e7e7e7; padding: 10px">
+						<td id="cmt" scope="row" style="padding-left: 25px; color: blue;">
+							첫 댓글을 작성해보세요!</td>
+					</tr>
+				</tbody>
+			</table>
+			<%
+				}
+			%>
 			<!-- 댓글 작성 -->
 			<div class="editor__container">
 				<form action="CommentInsert.do" method="post" class="editor__form"
@@ -153,10 +211,13 @@
 							name="cmt" placeholder="댓글" style="width: 400px;"> <input
 							type="hidden" name="id" value="<%=session.getAttribute("id")%>">
 						<input type="hidden" name="num" value=${board.board_num }>
-						<button type="submit" class="btn btn-dark" id="editor-submit-btn">댓글</button>
+						<button type="submit" class="btn btn-dark" id="editor-submit-btn" >댓글</button>
 					</div>
 				</form>
 			</div>
+			<%
+				}
+			%>
 		</div>
 	</div>
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

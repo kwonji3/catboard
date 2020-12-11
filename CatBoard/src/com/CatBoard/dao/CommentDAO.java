@@ -4,7 +4,7 @@ import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-
+import com.CatBoard.vo.BoardVO;
 import com.CatBoard.vo.CommentVO;
 
 public class CommentDAO {
@@ -64,7 +64,7 @@ public class CommentDAO {
 		try {
 			conn = connect();
 			pstmt = conn.prepareStatement("insert into comment (board_num,id,cmt) value (?,?,?)");
-			pstmt.setString(1, comment.getBoard_num());
+			pstmt.setInt(1, comment.getBoard_num());
 			pstmt.setString(2, comment.getId());
 			pstmt.setString(3, comment.getCmt());
 			pstmt.executeQuery();
@@ -79,7 +79,7 @@ public class CommentDAO {
 
 
 	//댓글 리스트
-	public ArrayList<CommentVO> commentList(String num) {
+	public ArrayList<CommentVO> commentList(int num) {
 
 		ArrayList<CommentVO> list = new ArrayList<CommentVO>();
 
@@ -92,11 +92,12 @@ public class CommentDAO {
 		try {
 			conn = connect();
 			pstmt = conn.prepareStatement("select board_num,id,cmt,CREATE_TIME from comment where board_num=?");
-			pstmt.setString(1, num);
+			pstmt.setInt(1, num);
 			rs = pstmt.executeQuery();
+			
 			while (rs.next()) {
 				comment = new CommentVO();
-				comment.setBoard_num(rs.getString(1));
+				comment.setBoard_num(rs.getInt(1));
 				comment.setId(rs.getString(2));
 				comment.setCmt(rs.getString(3));
 				comment.setCREATE_TIME(new SimpleDateFormat("yyyy-MM-dd hh:mm").format(rs.getTimestamp(4))); 
@@ -110,6 +111,39 @@ public class CommentDAO {
 		}
 
 		return list;
+	}
+	
+	
+	public CommentVO comment_list(String cnum) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		CommentVO comment = null;
+
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement("select board_num,id,cmt,CREATE_TIME from comment where board_num=?");
+			pstmt.setString(1, cnum);
+			rs = pstmt.executeQuery();
+			
+			if (rs.next()) {
+				comment = new CommentVO();
+				comment.setBoard_num(rs.getInt(1));
+				comment.setId(rs.getString(2));
+				comment.setCmt(rs.getString(3));
+				comment.setCREATE_TIME(new SimpleDateFormat("yyyy-MM-dd hh:mm").format(rs.getTimestamp(4))); 
+				
+			
+			}System.out.println(comment.getCREATE_TIME());
+
+		} catch (Exception ex) {
+			System.out.println("오류 발생 : " + ex);
+		} finally {
+			close(conn, pstmt, rs);
+		}
+
+		return comment;
 	}
 }
 //	

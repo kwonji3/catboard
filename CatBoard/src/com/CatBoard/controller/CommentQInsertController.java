@@ -19,10 +19,8 @@ public class CommentQInsertController implements Controller {
 	
 		String cmt = request.getParameter("cmt");
 		String id = request.getParameter("id");
-		String num =request.getParameter("num");
-		
-		System.out.println(id);
-		System.out.println(num);
+		String preNum = request.getParameter("num");
+		Integer num = Integer.parseInt(preNum);
 
 		String path = null;
 		path = "/qa_article.do?num="+num; // 셀렉트 박스에서 카테고리 선택시 선택한 카테고리.jsp로 이동

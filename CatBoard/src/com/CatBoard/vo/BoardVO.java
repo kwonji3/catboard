@@ -5,7 +5,7 @@ public class BoardVO {
 
 	
 	
-	private String board_num;
+	private int board_num;
 	private String board_id;
 	private String id;
 	private String title;
@@ -34,10 +34,10 @@ public class BoardVO {
 		this.board_id = board_id;
 	}
 	
-	public String getBoard_num() {
+	public int getBoard_num() {
 		return board_num;
 	}
-	public void setBoard_num(String board_num) {
+	public void setBoard_num(int board_num) {
 		this.board_num = board_num;
 	}
 	

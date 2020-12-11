@@ -29,10 +29,8 @@ public class FrontController extends HttpServlet {
 		list.put("/article.do", new BoardArticleController());
 		list.put("/qa_article.do", new BoardQArticleController());
 
-		
 		list.put("/CommentInsert.do", new CommentInsertController());
 		list.put("/CommentQInsert.do", new CommentQInsertController());
-		list.put("/CommentList.do", new CommentListController());
 
 
 	}

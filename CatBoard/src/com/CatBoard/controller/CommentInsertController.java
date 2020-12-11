@@ -18,12 +18,18 @@ public class CommentInsertController implements Controller {
 	
 		String cmt = request.getParameter("cmt");
 		String id = request.getParameter("id");
-		String num =request.getParameter("num");
+		String preNum = request.getParameter("num");
+		Integer num = Integer.parseInt(preNum);
+		
+
 		
 		System.out.println(id);
-		System.out.println(num);
+
 
 		String path = null;
+		
+
+		
 		path = "/article.do?num="+num; // 셀렉트 박스에서 카테고리 선택시 선택한 카테고리.jsp로 이동
 		
 		// VO객체에 데이타 바인딩
@@ -32,13 +38,15 @@ public class CommentInsertController implements Controller {
 		comment.setCmt(cmt);
 		comment.setId(id);
 		
+		
 
 		// Service 객체의 메서드 호출
 		CommentService service = CommentService.getInstance();
 		service.commentInsert(comment);
 		
 		ArrayList<CommentVO> list = service.commentList(num);
-		request.setAttribute("comment", list);
+		
+		request.getSession().setAttribute("comment", list);
 		HttpSession httpSession = request.getSession();
 		httpSession.setAttribute("id", id); //id를 세션에 저장
 

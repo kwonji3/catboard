@@ -4,10 +4,10 @@ img {
 	object-fit: cover;
 }
 
-/* #imgs { */
-/* 	width: 1100px; */
-/* 	height: 480px; */
-/* } */
+#imgs {
+	width: 1100px;
+	height: 480px;
+}
 
 .hovereffect {
 	width: 100%;

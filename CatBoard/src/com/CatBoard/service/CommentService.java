@@ -3,7 +3,7 @@ package com.CatBoard.service;
 import java.util.ArrayList;
 
 import com.CatBoard.dao.CommentDAO;
-
+import com.CatBoard.vo.BoardVO;
 import com.CatBoard.vo.CommentVO;
 
 public class CommentService {
@@ -21,22 +21,14 @@ public class CommentService {
 		dao.commentInsert(comment);
 	}
 
-//	public BoardVO memberSearch(String id,String pw) {
-//		BoardVO member = dao.memberSearch(id,pw);
-//		return member;
-//	}
-
-//	public void memberUpdate(BoardVO member) {
-//		dao.memberUpdate(member);
-//	}
-//
-//	public void memberDelete(String id) {
-//		dao.memberDelete(id);
-//	}
-
-	public ArrayList<CommentVO> commentList(String num) {
+	public ArrayList<CommentVO> commentList(int num) {
 		ArrayList<CommentVO> list = dao.commentList(num);
 		return list;
 	}
+	public CommentVO comment_list(String num) {
+		CommentVO comment = dao.comment_list(num);
+		return comment;
+	}
+ 
 
 }

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@page import="com.CatBoard.vo.BoardVO"%>
+<%@page import="com.CatBoard.vo.CommentVO"%>
 <%@page import="java.util.ArrayList"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
@@ -14,6 +15,7 @@
 	href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
 	integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
 	crossorigin="anonymous">
+<script src="http://code.jquery.com/jquery-latest.js"></script>
 <link rel="stylesheet" href="src/style.css">
 </head>
 <body>
@@ -39,9 +41,33 @@
 					</tr>
 				</thead>
 			</table>
-			<p class="bg-white text-dark" id="content"
-				style="text-align: left; padding-left: 40px;">${board.content }</p>
-				<!-- 수정 삭제, 작성자가 아니면 버튼 비활성화 -->
+			<!-- textarea 본문 글 길이에 따른 높이 자동 조절 -->
+			<style>
+				.wrap textarea {
+					width: 100%;
+					resize: none;
+					overflow-y: hidden; /* prevents scroll bar flash */
+					padding: 1.1em; /* prevents text jump on Enter keypress */
+					padding-bottom: 0.2em;
+					line-height: 1.6;
+				}
+			</style>
+			<script>
+				$(document).ready(function() {
+					$('.wrap').on('keyup', 'textarea', function(e) {
+						$(this).css('height', 'auto');
+						$(this).height(this.scrollHeight);
+					});
+					$('.wrap').find('textarea').keyup();
+				});
+			</script>
+			<div class="wrap" style="padding: 25px; border-top: 1px solid  #dddddd;">
+				<textarea class="bg-white text-dark" id="content"
+					style="text-align: left; padding-left: 25px; padding-right: 25px; border: none; box-sizing: border-box;"
+					readonly="readonly" disabled>${board.content }</textarea>
+			</div>
+		</div>
+		<!-- 수정 삭제, 작성자가 아니면 버튼 비활성화 -->
 		<c:set var="id" value='<%=session.getAttribute("id")%>' />
 		<!-- 변수 id = 세션값 -->
 		<c:if test="${id eq board.id }">
@@ -51,17 +77,18 @@
 				<input type="hidden" name="board_num" value="${board.board_num }" />
 				<input type="hidden" name="board_id" value="${board.board_id }" />
 				<input type="submit" class="btn btn-outline-dark   float-right"
-					value="삭제" />
+					style="margin-bottom: 20px;" value="삭제" />
+				<!-- 수정 버튼 -->
+				<input type="button" class="btn btn-outline-dark   float-right"
+					data-toggle="modal" data-target="#exampleModal2" value="수정" />
 			</form>
-			<!-- 수정 버튼 -->
-			<input type="button" class="btn btn-outline-dark   float-right"
-				data-toggle="modal" data-target="#exampleModal2" value="수정" />
+
 			<div class="modal fade" id="exampleModal2" tabindex="-1"
 				aria-labelledby="exampleModalLabel" aria-hidden="true">
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 class="modal-title" id="exampleModalLabel">게시글 작성</h5>
+							<h5 class="modal-title" id="exampleModalLabel">게시글 수정</h5>
 							<button type="button" class="close" data-dismiss="modal"
 								aria-label="Close">
 								<span aria-hidden="true">&times;</span>
@@ -84,11 +111,11 @@
 													<!--  콤보상자 -->
 													<!--  유효성 검사 -->
 													<select class="custom-select" id="inputGroupSelect02"
-														name="board_id" required>
+														name="board_id" disabled>
 														<option selected>${board.board_id }</option>
-														<option value="고양이지식">고양이 지식</option>
-														<option value="고양이입양">고양이 입양</option>
-														<option value="고양이질문">고양이 질문</option>
+														<option value="catinfo">고양이 지식</option>
+														<option value="catadopt">고양이 입양</option>
+														<option value="catqa">고양이 질문</option>
 													</select>
 													<input type="hidden" name="id"
 														value="<%=session.getAttribute("id")%>">
@@ -111,9 +138,14 @@
 												</tr>
 											</tbody>
 										</table>
-										<button type="submit" class="btn btn-outline-dark float-right">수정하기</button>
-										<button type="button" class="btn btn-secondary float-right"
-											style="margin-right: 10px;" data-dismiss="modal">닫기</button>
+										<div>
+											<button type="submit"
+												class="btn btn-outline-dark float-right"
+												style="margin-bottom: 20px;">수정하기</button>
+											<button type="button" class="btn btn-secondary float-right"
+												style="margin-right: 10px;" data-dismiss="modal"
+												style="margin-bottom: 20px;">닫기</button>
+										</div>
 									</div>
 								</div>
 							</form>
@@ -122,51 +154,67 @@
 				</div>
 			</div>
 		</c:if>
-		<!-- id 와 board.id가 같지 않으면 버튼 비활성화 -->
-		<c:if test="${id ne board.id }">
-			<div>
-				<input type="button" class="btn btn-outline-dark float-right"
-					disabled="disabled" value="삭제" /> <input type="button"
-					class="btn btn-outline-dark float-right" disabled="disabled"
-					value="수정" />
-			</div>
-		</c:if>
-		</div>
-		
+		<!-- id 와 board.id가 같지 않으면 버튼 사라짐-->
+		<c:if test="${id ne board.id }"></c:if>
+
+
 		<!-- 답변 보기 -->
-		<div class="card" style="margin-bottom: 25px;">
-			<div class="board__container">
-				<table class="board">
-					<c:forEach var="com" items="${comment }">
-						<tr>
-							<td style="width: 70px;"><h1
-									style="padding-left: 20px; padding-top: 20px;">A.</h1></td>
-							<td class="board__contents" id="board-body"
-								style="padding-left: 20px; padding-top: 20px;">${com.cmt }<h2
-									id=link-to-column></h2></td>
-							<td>${com.id }</td>
-							<td>${com.CREATE_TIME }</td>
-						</tr>
-					</c:forEach>
-				</table>
-				<div class="board__index-containeor" id="index-container">
-					<!-- 답변 등록 -->
-					<div class="editor__container">
-						<div class="editor__container">
-							<form action="CommentQInsert.do" method="post"
-								class="editor__form" id="editor-form">
-								<div class="input-group">
-									<input type="text" class="form-control" id="editor-title-input"
-										name="cmt" placeholder="답변내용" style="width: 400px;"> <input
-										type="hidden" name="id"
-										value="<%=session.getAttribute("id")%>"> <input
-										type="hidden" name="num" value=${board.board_num }>
-									<button type="submit" class="btn btn-dark"
-										id="editor-submit-btn">답변하기</button>
-								</div>
-							</form>
+		<%
+			ArrayList<CommentVO> list = (ArrayList<CommentVO>) request.getAttribute("list");
+		%>
+		<%
+			if (!list.isEmpty()) {
+			for (int i = 0; i < list.size(); i++) {
+				CommentVO comment = list.get(i);
+		%>
+
+		<div class="board__container">
+			<table class="board" style="width: 1111px;">
+				<tbody
+					style="width: 968px; border: 1px solid #e7e7e7; padding: 10px">
+					<tr>
+						<td style="width: 70px;"><h1
+								style="padding-left: 20px; padding-top: 20px;">A.</h1></td>
+						<td class="board__contents" id="board-body"
+							style="width: 750px; padding-left: 20px; padding-top: 20px; padding-right: 20px;"><%=comment.getCmt()%><h2
+								id=link-to-column></h2></td>
+						<td><%=comment.getId()%></td>
+						<td><%=comment.getCREATE_TIME()%></td>
+					</tr>
+
+				</tbody>
+
+			</table>
+			<%
+				}
+			} else {
+			%>
+			<table class="table">
+				<tbody id="listBody">
+					<tr style="border: 1px solid #e7e7e7; padding: 10px">
+						<td id="cmt" scope="row" style="padding-left: 25px; color: blue;">
+							첫 답변을 작성해보세요!</td>
+					</tr>
+				</tbody>
+			</table>
+			<%
+				}
+			%>
+			<!-- 답변 등록 -->
+			<div class="editor__container">
+				<div class="editor__container">
+					<form action="CommentQInsert.do" method="post" class="editor__form"
+						id="editor-form">
+						<div class="input-group">
+							<input type="text" class="form-control" id="editor-title-input"
+								name="cmt" placeholder="답변내용"
+								style="width: 400px; margin-bottom: 20px;"> <input
+								type="hidden" name="id" value="<%=session.getAttribute("id")%>">
+							<input type="hidden" name="num" value=${board.board_num }>
+							<button type="submit" class="btn btn-dark" id="editor-submit-btn"
+								style="margin-bottom: 20px;">답변하기</button>
 						</div>
-					</div>
+					</form>
 				</div>
 			</div>
 		</div>

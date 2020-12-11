@@ -18,18 +18,18 @@
 			    <ul class="navbar-nav ">
 			    
 			      <li class="nav-item ">
-			        <a class="nav-link" href="BoardList.do?name=고양이지식"> 고양이 지식</a>
+			        <a class="nav-link" href="BoardList.do?name=catinfo&num=1"> 고양이 지식</a>
 			      </li>
 			      <li class="nav-item">
 			       <%
 						if (session.isNew() || session.getAttribute("id") == null) {
 					%>
 					<a class="nav-link" style="cursor: pointer;"
-						onClick="alert('로그인을 해주세요.');"> 고양이 지식</a>
+						onClick="alert('로그인을 해주세요.');"> 고양이 입양</a>
 					<%
 						} else {
 					%>
-					<a class="nav-link" href="BoardList.do?name=고양이입양"> 고양이 지식</a>
+					<a class="nav-link" href="BoardList.do?name=catadopt&num=1"> 고양이 입양</a>
 					<%
 						}
 					%>
@@ -43,7 +43,7 @@
 					<%
 						} else {
 					%>
-					<a class="nav-link" href="BoardList.do?name=고양이질문">고양이 Q&A</a>
+					<a class="nav-link" href="BoardList.do?name=catqa&num=1">고양이 Q&A</a>
 					<%
 						}
 					%>

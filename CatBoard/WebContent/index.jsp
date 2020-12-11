@@ -69,7 +69,6 @@
 							String msg = (String) request.getAttribute("error");
 						if (msg == null)
 							msg = "";
-						//String result = (String)request.getAttribute("alert");
 						%>
 						<!-- 에러 메세지 -->
 						<%=msg%>
@@ -161,7 +160,7 @@
 					alt="">
 				<div class="overlay">
 					<h2>고양이 지식</h2>
-					<a class="info" href="BoardList.do?name=고양이지식">좋은 집사가 되려면?</a>
+					<a class="info" href="BoardList.do?name=catinfo&num=1">좋은 집사가 되려면?</a>
 				</div>
 			</div>
 		</div>
@@ -180,7 +179,8 @@
 					<%
 						} else {
 					%>
-					<a class="info" href="BoardList.do?name=고양이입양"> 사지말고 입양하세요</a>
+					<a class="info" href="BoardList.do?name=catadopt&num=1"> 사지말고
+						입양하세요</a>
 					<%
 						}
 					%>
@@ -201,7 +201,8 @@
 					<%
 						} else {
 					%>
-					<a class="info" href="BoardList.do?name=고양이질문">무엇이든 물어보세요!</a>
+					<a class="info" href="BoardList.do?name=catqa&num=1">무엇이든
+						물어보세요!</a>
 					<%
 						}
 					%>

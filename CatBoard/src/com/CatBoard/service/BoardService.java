@@ -23,27 +23,27 @@ public class BoardService {
 		dao.boardInsert(board);
 	}
 
-//	public BoardVO memberSearch(String id) {
-//		BoardVO member = dao.memberSearch(id);
-//		return member;
-//	}
 
 	public void boardUpdate(BoardVO board) {
 		dao.boardUpdate(board);
 	}
 
-	public void boardDelete(String  board_num) {
+	public void boardDelete(int board_num) {
 		dao.boardDelete( board_num);
 	}
 
-	public ArrayList<BoardVO> boardList(String category) {
-		ArrayList<BoardVO> list = dao.boardList(category);
+	public ArrayList<BoardVO> boardList(String category, int display, int disNum) {
+		ArrayList<BoardVO> list = dao.boardList(category, display, disNum );
 		return list;
 	}
-	public BoardVO boardArticle(String num) {
+	public BoardVO boardArticle(int num) {
 		BoardVO board = dao.boardArticle(num);
 		return board;
 	}
- 
+	
+	//게시판 총 개수
+	public int getBoardCount(String boardId) {
+		return dao.getBoardCount(boardId);
+	}
 
 }

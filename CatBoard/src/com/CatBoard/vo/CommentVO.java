@@ -1,21 +1,20 @@
 package com.CatBoard.vo;
 
 public class CommentVO {
-	
-	private String board_num;
-	
 
+	private int board_num;
 	private String cmt;
 	private String id;
 	private String CREATE_TIME;
-	
-	public String getBoard_num() {
+
+	public int getBoard_num() {
 		return board_num;
 	}
 
-	public void setBoard_num(String board_num) {
+	public void setBoard_num(int board_num) {
 		this.board_num = board_num;
 	}
+
 	public String getCREATE_TIME() {
 		return CREATE_TIME;
 	}
@@ -39,5 +38,5 @@ public class CommentVO {
 	public void setCmt(String cmt) {
 		this.cmt = cmt;
 	}
-	
+
 }

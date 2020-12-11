@@ -21,30 +21,41 @@
 		<!-- 네비게이션바  헤더 -->
 		<%@include file="view/header.jsp"%>
 		<!-- 이미지 슬라이드 -->
+		<div>
+			<button class="btn btn-light" data-toggle="collapse"
+				href="#collapseExample" aria-expanded="false"
+				aria-controls="collapseExample"
+				style="background-color: transparent;">▼</button>
+		</div>
 		<div id="carouselExampleInterval" class="carousel slide"
 			data-ride="carousel">
-			<div class="carousel-inner">
-				<div class="carousel-item active" data-interval="3000">
-					<img src="src/cat2.jpg" class="d-block w-100" alt="...">
-				</div>
-				<div class="carousel-item" data-interval="3000">
-					<img src="src/cat3.jpg" class="d-block w-100" alt="...">
-				</div>
-				<div class="carousel-item" data-interval="3000">
-					<img src="src/cat4.jpg" class="d-block w-100" alt="...">
+			<div class="collapse" id="collapseExample">
+				<div class="well">
+					<div class="carousel-inner" id="imgs">
+						<div class="carousel-item active" data-interval="3000">
+							<img src="src/cat2.jpg" class="d-block w-100" alt="...">
+						</div>
+						<div class="carousel-item" data-interval="3000">
+							<img src="src/cat3.jpg" class="d-block w-100" alt="...">
+						</div>
+						<div class="carousel-item" data-interval="3000">
+							<img src="src/cat4.jpg" class="d-block w-100" alt="...">
+						</div>
+					</div>
+					<a class="carousel-control-prev" href="#carouselExampleInterval"
+						role="button" data-slide="prev"> <span
+						class="carousel-control-prev-icon" aria-hidden="true"></span> <span
+						class="sr-only">Previous</span>
+					</a> <a class="carousel-control-next" href="#carouselExampleInterval"
+						role="button" data-slide="next"> <span
+						class="carousel-control-next-icon" aria-hidden="true"></span> <span
+						class="sr-only">Next</span>
+					</a>
+
 				</div>
 			</div>
-			<a class="carousel-control-prev" href="#carouselExampleInterval"
-				role="button" data-slide="prev"> <span
-				class="carousel-control-prev-icon" aria-hidden="true"></span> <span
-				class="sr-only">Previous</span>
-			</a> <a class="carousel-control-next" href="#carouselExampleInterval"
-				role="button" data-slide="next"> <span
-				class="carousel-control-next-icon" aria-hidden="true"></span> <span
-				class="sr-only">Next</span>
-			</a>
 		</div>
-		<br> <a class="blog-header-logo text-dark" href="cat_adopt.jsp"
+		<br> <a class="blog-header-logo text-dark"
 			style="margin: 10px;"> 고양이 입양 </a><br>
 
 		<!--  글 목록 -->
@@ -55,7 +66,7 @@
 						<th scope="cols">No.</th>
 						<th scope="cols">제목</th>
 						<th scope="cols">작성자</th>
-						<th scope="cols">날짜</th>
+						<th scope="cols">작성날짜</th>
 					</tr>
 				</thead>
 				<%
@@ -72,7 +83,7 @@
 						<td><%=board.getBoard_num()%></td>
 						<!-- title -->
 						<th scope="row" style="cursor: pointer;"><a
-							href="article.do?num=<%=board.getBoard_num()%>"
+							href="article.do?num=<%=Integer.toString(board.getBoard_num())%>"
 							style="text-decoration: none;"><%=board.getTitle()%></a></th>
 						<!-- 작성자 -->
 						<td><%=board.getId()%></td>
@@ -98,14 +109,18 @@
 		%>
 		<button type="button" class="btn btn-outline-dark  float-right"
 			disabled="disabled" style="margin-right: 25px;">작성하기</button>
-		<br><br><br>
+		<br>
+		<br>
+		<br>
 		<%
 			} else {
 		%>
 		<button type="button" class="btn btn-outline-dark  float-right"
 			data-toggle="modal" data-target="#exampleModal2"
 			style="margin-right: 25px;">작성하기</button>
-		<br><br><br>
+		<br>
+		<br>
+		<br>
 		<%
 			}
 		%>
@@ -138,9 +153,9 @@
 												<select class="custom-select" id="inputGroupSelect02"
 													name="select" onchange="select(this)" required>
 													<option value="">카테고리 선택</option>
-													<option value="고양이지식">고양이 지식</option>
-													<option value="고양이입양">고양이 입양</option>
-													<option value="고양이질문">고양이 질문</option>
+													<option value="catinfo">고양이 지식</option>
+													<option value="catadopt">고양이 입양</option>
+													<option value="catqa">고양이 질문</option>
 												</select>
 												<input type="hidden" name="id"
 													value="<%=session.getAttribute("id")%>">
@@ -172,19 +187,39 @@
 				</div>
 			</div>
 		</div>
-		<!--  페이지네이션 -->
+		<!-- 페이지 네이션 -->
 		<nav aria-label="Page navigation example">
 			<ul class="pagination justify-content-center text-secondary">
-				<li class="page-item disabled"><a class="page-link" href="#"
-					tabindex="-1" aria-disabled="true">Previous</a></li>
-				<li class="page-item"><a class="page-link" href="#"
-					style="color: black;">1</a></li>
-				<li class="page-item"><a class="page-link" href="#"
-					style="color: black;">2</a></li>
-				<li class="page-item"><a class="page-link" href="#"
-					style="color: black;">3</a></li>
-				<li class="page-item"><a class="page-link" href="#"
-					style="color: black;">Next</a></li>
+				<!-- prev가 true면 -->
+				<c:if test="${page.prev }">
+					<!--  현재 페이지 전에  previous 버튼 생김 -->
+					<li class="page-item disabled"><a class="page-link"
+						href="/CatBoard/BoardList.do?name=${category}&num=${page.startPageNum - 1}"
+						tabindex="-1" aria-disabled="true">Previous</a></li>
+				</c:if>
+				<!-- 반복문 (페이지 시작 표시 수, 페이지 마지막 표시 수) -->
+				<c:forEach begin="${page.startPageNum }" end="${page.endPageNum}"
+					var="num">
+					<!-- select=1 가 현재 페이지 번호 num과 같지 않으면  -->
+					<c:if test="${select != num }">
+						<li class="page-item"><a class="page-link"
+							href="/CatBoard/BoardList.do?name=${category}&num=${num}"
+							style="color: black;">${num}</a></li>
+					</c:if>
+					<!-- 현재 해당 페이지이면  -->
+					<c:if test="${select == num }">
+						<!-- 해당페이지 굵게 -->
+						<li class="page-item"><b class="page-link"
+							style="color: black;">${num}</b></li>
+					</c:if>
+				</c:forEach>
+				<!-- next가 true면 -->
+				<c:if test="${page.next }">
+					<!-- 마지막 나온 페이지 다음에 Next버튼 나옴 -->
+					<li class="page-item"><a class="page-link"
+						href="/CatBoard/BoardList.do?name=${category}&num=${page.endPageNum + 1}"
+						style="color: black;">Next</a></li>
+				</c:if>
 			</ul>
 		</nav>
 	</div>
